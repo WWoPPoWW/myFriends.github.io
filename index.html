@@ -3,10 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
     <title>myFriends</title>
-    <button onclick="Clickity()">Click to random number of friends and also input their name and age.</button>
-    <button onclick="Reset()">Click to reset all information.</button>
+    <center><img src="images/Question.png" alt="Person in Question"></center>
+    <center><button class = "this-button" onclick="Clickity()">Click to random number of friends and also input their name and age.</button></center>
+    <center><button class = "this-button" onclick="Reset()">Click to reset all information.</button></center>
+    <center><div id="showinputhere" class="container" style="display: none;"></div></center>
 </head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin-bottom: 20px; 
+    }
+
+    .container {
+        width: 50%;
+        display:flex;
+        text-align: center;
+        padding: 20px; 
+        border: 1px solid #ee7575; 
+        border-radius: 5px; 
+        background-color: #1ca350;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    }
+
+    ul {
+        display: inline-block;
+        text-align: left;
+        padding-left: 0; 
+    }
+
+    ul li {
+        list-style-type: none;
+        margin-bottom: 5px;
+    }
+
+    p {
+        margin: 5px 0; 
+    }
+</style>
 <body>
     <script>
     var friends = [];
@@ -58,6 +93,7 @@ function findMinAge(){
     return minFriend;
 }
 
+//หาอายุคนเยอะสุด
 function findMaxAge(){
     let max = friends[0].age;
     for(let friend of friends){
@@ -75,6 +111,7 @@ function findMaxAge(){
     return maxFriend;
 }
 
+//ฟังก์ชันเกิดจากการคลิกปุ่ม
 function Clickity(){
     //แสดงผลของจำนวนเพื่อนที่สุ่มมาได้
     let Unknown = "Unknown";
@@ -104,12 +141,49 @@ function Clickity(){
     console.log("The average of friend's age: ", averageAge());
     console.log("The friend with min age: ", findMinAge());
     console.log("The friend with max age: ", findMaxAge());
+
+    DisplayFriendsInfo();
 }
+//ฟังก์ชันเกิดจากการกดปุ่ม reset
 function Reset(){
     friends = [];
     minFriend = [];
     maxFriend = [];
+    document.getElementById('showinputhere').innerHTML = ""; // Clear information 
 }
+//โชว์ข้อมูล
+function DisplayFriendsInfo() {
+            document.getElementById('showinputhere').style.display = "block";
+            let displayHtml = "<p>All friends' information:</p>";
+            displayHtml += "<ul>";
+            for (let friend of friends) {
+                displayHtml += "<li>Name: " + friend.name + ", Age: " + friend.age + "</li>";
+            }
+            displayHtml += "</ul>";
+
+            // Calculate and display additional information
+            let totalAge = calculateTotalAge();
+            let avgAge = averageAge();
+            let minAgeFriends = findMinAge();
+            let maxAgeFriends = findMaxAge();
+
+            displayHtml += "<p>Total age of all friends: " + totalAge + "</p>";
+            displayHtml += "<p>Average age of all friends: " + avgAge.toFixed(2) + "</p>";
+            displayHtml += "<p>Friend(s) with minimum age: ";
+            minAgeFriends.forEach(function (friend) {
+                displayHtml += friend.name + " (Age: " + friend.age + "), ";
+            });
+            displayHtml = displayHtml.slice(0, -2); // Remove the last comma and space
+            displayHtml += "</p>";
+            displayHtml += "<p>Friend(s) with maximum age: ";
+            maxAgeFriends.forEach(function (friend) {
+                displayHtml += friend.name + " (Age: " + friend.age + "), ";
+            });
+            displayHtml = displayHtml.slice(0, -2); // Remove the last comma and space
+            displayHtml += "</p>";
+
+            document.getElementById("showinputhere").innerHTML = displayHtml;
+        }
     </script>
 </body>
 </html>
