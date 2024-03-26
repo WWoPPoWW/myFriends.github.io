@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myFriends</title>
+    <button onclick="Clickity()">Click to random number of friends and also input their name and age.</button>
+    <button onclick="Reset()">Click to reset all information.</button>
+</head>
+<body>
+    <script>
+    var friends = [];
+    var minFriend = [];
+    var maxFriend = [];
+//สุ่มจำนวนเพื่อน
+function generateNumber(){
+    return Math.floor(Math.random() * 9) + 1;
+}
+
+//เพิ่มข้อมูลเพื่อน โดยมีชื่อและอายุ
+function addFriend(name, age){
+    friends.push({name: name, age: age});
+}
+
+//จำนวนปีของอายุของเพื่อนทุกคนรวมกัน
+function calculateTotalAge(){
+    let totalAge = 0;
+    for(let friend of friends){
+        totalAge += friend.age;
+    }
+    return totalAge;
+}
+
+//อายุเฉลี่ย
+function averageAge(){
+    let totalAge = 0;
+    for(let friend of friends){
+        totalAge += friend.age;
+    }
+    return totalAge/friends.length;
+}
+
+//หาคนอายุน้อยสุด
+function findMinAge(){
+    let min = friends[0].age;
+    for(let friend of friends){
+        //ถ้าเจอคนอายุน้อยกว่า min จะเอาอายุคนนั้นเป็น min และลบ object จาก minFriend เพื่อเพิ่ม object ใหม่
+        if(min > friend.age){
+            min = friend.age;
+            minFriend = [];
+            minFriend.push(friend);
+        }
+        //ถ้าเจอคนอายุเท่ากับกับ min จะเอา object คนนั้นไปใส่ใน minFriend
+        else if(min == friend.age){
+            minFriend.push(friend);
+        }
+    }
+    return minFriend;
+}
+
+function findMaxAge(){
+    let max = friends[0].age;
+    for(let friend of friends){
+        //ถ้าเจอคนอายุมากกว่า max จะเอาอายุคนนั้นเป็น max และลบ object จาก maxFriend เพื่อเพิ่ม object ใหม่
+        if(max < friend.age){
+            max = friend.age;
+            maxFriend = [];
+            maxFriend.push(friend);
+        }
+        //ถ้าเจอคนอายุเท่ากับกับ max จะเอา object คนนั้นไปใส่ใน maxFriend
+        else if(max == friend.age){
+            maxFriend.push(friend);
+        }
+    }
+    return maxFriend;
+}
+
+function Clickity(){
+    //แสดงผลของจำนวนเพื่อนที่สุ่มมาได้
+    let Unknown = "Unknown";
+    let numFriends = generateNumber();
+    console.log("Number of friends : " + numFriends);
+
+    //input ชื่อและอายุของเพื่อน
+    for(let i = 0; i < numFriends; i++){
+        name = null;
+        age = null;
+
+        var name = prompt("Friend " + (i+1) + "'s name");
+        //ถ้าไม่ใส่ชื่อหรือ Cancel จะเป็น Unknown
+        while(!name){
+            name = Unknown;
+        };
+        var age = parseInt(prompt("Friend " + (i+1) + "'s age"));
+        // ปรับค่า age เป็น 0 ถ้าไม่ใส่เลขหรือ Cancel
+        while(!age){
+            alert("Please insert age");
+            var age = parseInt(prompt("Friend " + (i+1) + "'s age"));
+        }
+        addFriend(name,age); 
+    }
+    console.log("All friends' information: ", friends);
+    console.log("The summation of friend's age: ", calculateTotalAge());
+    console.log("The average of friend's age: ", averageAge());
+    console.log("The friend with min age: ", findMinAge());
+    console.log("The friend with max age: ", findMaxAge());
+}
+function Reset(){
+    friends = [];
+    minFriend = [];
+    maxFriend = [];
+}
+    </script>
+</body>
+</html>
