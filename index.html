@@ -5,17 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
     <title>myFriends</title>
-    <center><img src="images/Question.png" alt="Person in Question"></center>
-    <center><button class = "this-button" onclick="Clickity()">Click to random number of friends and also input their name and age.</button></center>
-    <center><button class = "this-button" onclick="Reset()">Click to reset all information.</button></center>
-    <center><div id="showinputhere" class="container" style="display: none;"></div></center>
+    
 </head>
 <style>
     body {
         font-family: Arial, sans-serif;
         margin-bottom: 20px; 
     }
-
     .container {
         width: 50%;
         display:flex;
@@ -25,6 +21,7 @@
         border-radius: 5px; 
         background-color: #1ca350;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+        margin-bottom: 20px;
     }
 
     ul {
@@ -43,10 +40,41 @@
     }
 </style>
 <body>
-    <script>
-    var friends = [];
-    var minFriend = [];
-    var maxFriend = [];
+    <center><img id = "image" src="images/Question.png" alt="Person in Question"></center>
+    <center><p>Place your mouse on this image</p></center>
+    <div style="border: 1px solid black;padding:8px; margin:20px" onmousemove="showCoords(event)" onmouseout="clearCoor()">
+    <center><button id = "clickity" class = "this-button">Click to random number of friends and also input their name and age.</button></center>
+    <center><button id = "reset" class = "this-button">Click to reset all information.</button></center>
+    <center><div id="showinputhere" class="container" style="display: none;"></div></center>
+    </div>
+    <p>Window resized <span id="demo2">0</span> times.</p>
+    <p id = "demo"></p>
+<script>
+var friends = [];
+var minFriend = [];
+var maxFriend = [];
+var clickity = document.getElementById("clickity");
+var reset = document.getElementById("reset");
+var image = document.getElementById("image");
+clickity.addEventListener("click", Clickity);
+reset.addEventListener("click", Reset);
+image.addEventListener("mouseover", imageChange);
+image.addEventListener("mouseout", imageChange2);
+window.addEventListener("resize", resizeWindow);
+//นับจำนวนที่ resize 
+var x = 0;
+function resizeWindow(){
+    var txt = x += 1;
+    document.getElementById("demo2").innerHTML = txt;
+}
+//เปลี่ยนรูปเมื่อวางเมาส์ที่รูป
+function imageChange(){
+    image.src = "images/Jumpscare.png";
+}
+//เปลี่ยนรูปเมื่อเอาเมาส์ออกจากรูป
+function imageChange2(){
+    image.src = "images/Question.png";
+}
 //สุ่มจำนวนเพื่อน
 function generateNumber(){
     return Math.floor(Math.random() * 9) + 1;
@@ -77,7 +105,7 @@ function averageAge(){
 
 //หาคนอายุน้อยสุด
 function findMinAge(){
-    let min = friends[0].age;
+    let min = Infinity;
     for(let friend of friends){
         //ถ้าเจอคนอายุน้อยกว่า min จะเอาอายุคนนั้นเป็น min และลบ object จาก minFriend เพื่อเพิ่ม object ใหม่
         if(min > friend.age){
@@ -95,7 +123,7 @@ function findMinAge(){
 
 //หาอายุคนเยอะสุด
 function findMaxAge(){
-    let max = friends[0].age;
+    let max = -Infinity;
     for(let friend of friends){
         //ถ้าเจอคนอายุมากกว่า max จะเอาอายุคนนั้นเป็น max และลบ object จาก maxFriend เพื่อเพิ่ม object ใหม่
         if(max < friend.age){
@@ -111,6 +139,17 @@ function findMaxAge(){
     return maxFriend;
 }
 
+//ดู Coordinate ของเมาส์
+function showCoords(event) {
+  let x = event.clientX;
+  let y = event.clientY;
+  let text = "X coords: " + x + ", Y coords: " + y;
+  document.getElementById("demo").innerHTML = text;
+}
+//เคลีย Coordinate
+function clearCoor() {
+  document.getElementById("demo").innerHTML = "";
+}
 //ฟังก์ชันเกิดจากการคลิกปุ่ม
 function Clickity(){
     //แสดงผลของจำนวนเพื่อนที่สุ่มมาได้
@@ -150,10 +189,11 @@ function Reset(){
     minFriend = [];
     maxFriend = [];
     document.getElementById('showinputhere').innerHTML = ""; // Clear information 
+    document.getElementById('showinputhere').style.display = "none";
 }
 //โชว์ข้อมูล
 function DisplayFriendsInfo() {
-            document.getElementById('showinputhere').style.display = "block";
+            document.getElementById('showinputhere').style.display = "inline-block";
             let displayHtml = "<p>All friends' information:</p>";
             displayHtml += "<ul>";
             for (let friend of friends) {
